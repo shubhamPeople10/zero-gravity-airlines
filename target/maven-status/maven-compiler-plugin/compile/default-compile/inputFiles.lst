@@ -16,3 +16,4 @@
 /home/p10user/Documents/Zero_Gravity_Airlines/zero-gravity-airlines/src/main/java/com/zerogravityairlines/exception/InvalidFlightException.java
 /home/p10user/Documents/Zero_Gravity_Airlines/zero-gravity-airlines/src/main/java/com/zerogravityairlines/service/FlightService.java
 /home/p10user/Documents/Zero_Gravity_Airlines/zero-gravity-airlines/src/main/java/com/zerogravityairlines/exception/GlobalExceptionHandler.java
+/home/p10user/Documents/Zero_Gravity_Airlines/zero-gravity-airlines/src/main/java/com/zerogravityairlines/config/MySQLCustomDialect.java

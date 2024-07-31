@@ -5,16 +5,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Table(name = "booking")
 public class Booking {
 
     @Id
+    @Column(name = "confirmation_number", nullable = false, unique = true)
     private String confirmationNumber;
 
+    @Column(name = "flight_number")
     private String flightNumber;
+
+    @Column(name = "booking_time")
     private LocalDateTime bookingTime;
 
-    @OneToMany(cascade = CascadeType.ALL)
-
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Passenger> passengers;
 
     // Getters and setters

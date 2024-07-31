@@ -26,8 +26,8 @@ public class BookingService {
         booking.setFlightNumber(flightNumber);
         booking.setBookingTime(LocalDateTime.now());
 
-        for (Passenger passenger : passengers) {
-            passenger.setConfirmationNumber(confirmationNumber);
+        for (Passenger passenger : booking.getPassengers()) {
+            passenger.setBooking(booking);
             passengerRepository.save(passenger);
         }
 

@@ -7,6 +7,7 @@ com/zerogravityairlines/model/CityPair.class
 com/zerogravityairlines/exception/NoDirectFlightException.class
 com/zerogravityairlines/model/BookingRequest.class
 com/zerogravityairlines/model/Passenger.class
+com/zerogravityairlines/config/MySQLCustomDialect.class
 com/zerogravityairlines/repository/FlightRepository.class
 com/zerogravityairlines/controller/FlightController.class
 com/zerogravityairlines/repository/CityPairRepository.class
