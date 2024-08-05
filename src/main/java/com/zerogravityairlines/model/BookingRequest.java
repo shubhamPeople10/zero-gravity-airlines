@@ -1,25 +1,12 @@
 package com.zerogravityairlines.model;
 
 import java.util.List;
+import lombok.Data;
 
+@Data
 public class BookingRequest {
     private String flightNumber;
+    private String cityPairId;
+    private int numberOfPassengers;
     private List<Passenger> passengers;
-
-    // Getters and setters
-    public String getFlightNumber() {
-        return flightNumber;
-    }
-
-    public void setFlightNumber(String flightNumber) {
-        this.flightNumber = flightNumber;
-    }
-
-    public List<Passenger> getPassengers() {
-        return passengers;
-    }
-
-    public void setPassengers(List<Passenger> passengers) {
-        this.passengers = passengers;
-    }
 }
