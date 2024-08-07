@@ -3,6 +3,7 @@ package com.zerogravityairlines.model;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Entity
@@ -15,11 +16,13 @@ public class Passenger {
     private Long id;
 
     @Column(name = "first_name")
-    @NotEmpty(message = "First Name is required")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "First Name can only contain alphabets")
+    @Size(max = 20, message = "First Name cannot be longer than 20 characters")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotEmpty(message = "Last Name is required")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Last Name can only contain alphabets")
+    @Size(max = 20, message = "Last Name cannot be longer than 20 characters")
     private String lastName;
 
     @Column(name = "age")
@@ -27,22 +30,31 @@ public class Passenger {
     private int age;
 
     @Column(name = "gender")
-    @NotEmpty(message = "Gender is required")
+    @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be Male, Female, or Other")
     private String gender;
 
     @Column(name = "email")
-    @NotEmpty(message = "Email is required")
     @Email(message = "Email should be valid")
     private String email;
 
     @Column(name = "phone_number")
-    @NotEmpty(message = "Phone number is required")
-    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number should be 10 digits")
+    @Pattern(regexp = "^[0-9]{0,10}$", message = "Phone Number should be numeric and up to 10 digits")
     private String phoneNumber;
-
 
     @ManyToOne
     @JoinColumn(name = "confirmation_number", nullable = false)
     @JsonBackReference
     private Booking booking;
+
+    @Column(name = "is_primary")
+    @JsonProperty("isPrimary")
+    private boolean isPrimary = false;
+
+    public boolean isPrimary() {
+        return isPrimary;
+    }
+
+    public void setPrimary(boolean isPrimary) {
+        this.isPrimary = isPrimary;
+    }
 }

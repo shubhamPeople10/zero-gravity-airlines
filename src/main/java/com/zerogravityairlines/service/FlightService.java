@@ -52,7 +52,7 @@ public class FlightService {
                 .orElseThrow(() -> new CustomException("No available flights for the selected cities", HttpStatus.NOT_FOUND.value()));
 
         // Fetch flights for the given city pair and date
-        List<Flight> flights = flightRepository.findByCityPairAndDepartureTimeBetween(cityPair, LocalTime.MIDNIGHT, LocalTime.MAX);
+        List<Flight> flights = flightRepository.findByCityPairAndDateAndDepartureTimeBetween(cityPair, date, LocalTime.MIDNIGHT, LocalTime.MAX);
 
         return flights.stream()
                 .map(flight -> calculatePriceForPassengers(flight, numberOfPassengers))
@@ -61,7 +61,7 @@ public class FlightService {
 
     private void validateCityCode(String cityCode) {
         cityRepository.findByCityCode(cityCode)
-                .orElseThrow(() -> new CustomException("Invalid city code: " + cityCode, HttpStatus.BAD_REQUEST.value()));
+                .orElseThrow(() -> new CustomException("Invalid city code: " + cityCode, HttpStatus.NOT_FOUND.value()));
     }
 
     private Flight calculatePriceForPassengers(Flight flight, int numberOfPassengers) {

@@ -12,10 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,32 +33,46 @@ public class FlightController {
     }
 
     @GetMapping("/destinations")
-    public ApiResponse<List<CityPair>> getDestinationsByOrigin(@RequestParam @NotBlank(message = "Origin city code is required") String originCityCode) {
+    public ApiResponse<List<CityPair>> getDestinationsByOrigin(@RequestParam(required = false) String originCityCode) {
+        if (originCityCode == null || originCityCode.trim().isEmpty()) {
+            throw new CustomException("Origin city code is required", HttpStatus.BAD_REQUEST.value());
+        }
         List<CityPair> destinations = flightService.getDestinationsByOrigin(originCityCode);
         return new ApiResponse<>(HttpStatus.OK.value(), destinations, null);
     }
 
     @GetMapping("/search")
     public ApiResponse<List<Flight>> searchFlights(
-            @RequestParam @NotBlank(message = "Origin is required") String originCityCode,
-            @RequestParam @NotBlank(message = "Destination is required") String destinationCityCode,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @NotNull(message = "Date is required") LocalDate date,
-            @RequestParam(defaultValue = "1") @Min(value = 1, message = "Number of passengers must be at least 1")
-            @Max(value = 2, message = "Number of passengers can be at most 2") int numberOfPassengers) {
+            @RequestParam(required = false) String originCityCode,
+            @RequestParam(required = false) String destinationCityCode,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(defaultValue = "1") int numberOfPassengers) {
 
-        validateSearchRequest(originCityCode, destinationCityCode, date);
+            validateSearchRequest(originCityCode, destinationCityCode, date, numberOfPassengers);
 
-        List<Flight> flights = flightService.searchFlights(originCityCode, destinationCityCode, date, numberOfPassengers);
-        return new ApiResponse<>(HttpStatus.OK.value(), flights, null);
+            List<Flight> flights = flightService.searchFlights(originCityCode, destinationCityCode, date, numberOfPassengers);
+            return new ApiResponse<>(HttpStatus.OK.value(), flights, null);
     }
 
-    private void validateSearchRequest(String originCityCode, String destinationCityCode, LocalDate date) {
-        if (originCityCode.isEmpty() || destinationCityCode.isEmpty()) {
-            throw new CustomException("Origin and Destination cannot be empty", HttpStatus.BAD_REQUEST.value());
+    private void validateSearchRequest(String originCityCode, String destinationCityCode, LocalDate date, int numberOfPassengers) {
+        if (originCityCode == null || originCityCode.isEmpty()) {
+            throw new CustomException("Origin city code is required", HttpStatus.BAD_REQUEST.value());
+        }
+
+        if (destinationCityCode == null || destinationCityCode.isEmpty()) {
+            throw new CustomException("Destination city code is required", HttpStatus.BAD_REQUEST.value());
+        }
+
+        if (date == null) {
+            throw new CustomException("Date of journey is required", HttpStatus.BAD_REQUEST.value());
         }
 
         if (date.isBefore(LocalDate.now())) {
             throw new CustomException("Date of journey must be today or a future date", HttpStatus.BAD_REQUEST.value());
+        }
+
+        if (numberOfPassengers < 1 || numberOfPassengers > 2) {
+            throw new CustomException("Number of passengers must be between 1 and 2", HttpStatus.BAD_REQUEST.value());
         }
     }
 }

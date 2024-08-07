@@ -1,15 +1,15 @@
 package com.zerogravityairlines.exception;
 
+import lombok.Getter;
+
+@Getter
 public class CustomException extends RuntimeException {
 
-    private int statusCode;
+    private final int statusCode;
 
     public CustomException(String message, int statusCode) {
         super(message);
         this.statusCode = statusCode;
     }
 
-    public int getStatusCode() {
-        return statusCode;
-    }
 }
